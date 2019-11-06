@@ -14,7 +14,7 @@
                 @foreach($fields as $field)
                     <th class="text-center"> {{ trans('fields.' . $field) }}</th>
                 @endforeach
-                @include('reusable.parts.table_buttons_headers')
+                @include('crud.parts.table_buttons_headers')
             </tr>
             </thead>
             <tbody>
@@ -25,15 +25,15 @@
                             {{ $row[$field] ?? '' }}
                         </td>
                     @endforeach
-                    @include('reusable.parts.table_buttons')
+                    @include('crud.parts.table_buttons')
                 </tr>
             @endforeach
             </tbody>
         </table>
         <p><small>{{ $comment ?? '' }}</small></p>
-        {{$rows->links()}}
+        {{$rows->appends(request()->query())->links()}}
         <hr/>
-        @include('reusable.parts.post_table_buttons')
+        @include('crud.parts.post_table_buttons')
     @else
         <h4>Нет данных для формирования страницы с такими условиями</h4>
     @endif

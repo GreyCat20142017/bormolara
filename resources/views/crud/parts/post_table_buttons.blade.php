@@ -1,8 +1,9 @@
 @if (!empty($postTableButtons))
-    @foreach($postTableButtons as $buttonKey=>$button)
+    @foreach($postTableButtons as $button)
         <a class="btn btn-sm btn-primary"
-           href="{{route($resource . '.' . $buttonKey)}}">
+           href="{{route($button['route' ?? 'main'])}}">
             {{ $button['title'] ?? '' }}
         </a>
     @endforeach
 @endif
+

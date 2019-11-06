@@ -15,7 +15,7 @@
         <div>
             @foreach($fields as $field)
                 @if (!empty($selects) && array_key_exists($field, $selects) && !empty($selects[$field]))
-                    @include('reusable.parts.select', ['values' => $selects[$field]['values'] ?? [], 'field' => $field])
+                    @include('crud.parts.select', ['values' => $selects[$field]['values'] ?? [], 'field' => $field])
                 @else
                     <label for="{{$field}}">{{trans('fields.' . $field)}}:</label>
                     <input class="form-control  @if ($errors->has($field)) is-invalid @endif"

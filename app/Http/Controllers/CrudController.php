@@ -1,34 +1,44 @@
 <?php
 
     namespace App\Http\Controllers;
+
+    use App\Models\Crud;
     use Illuminate\Support\Facades\App;
     use Illuminate\Http\Request;
     use App\Repositories\RepositoryFactory;
-    use App\Models\Crud as CrudModel;
-    use App\Services\GCHelper;
+    use App\Services\CrudHelper;
 
     abstract class CrudController extends Controller {
 
         protected $resource;
         protected $model;
 
+        protected $indexView = 'crud.pagination_table';
+        protected $elementView = 'crud.element';
+
         public function __construct($modelName) {
             $this->middleware('auth');
-            $this->model = App::make($modelName);
             $this->resource = $modelName;
+            $this->model = App::make($modelName);
+            $this->modelsChildren = [];
         }
 
         public function index(Request $request) {
             $limit = intval(config()->offsetGet('constants.min_records_limit') ?? 10);
+            $query = $request->query();
+            dump($query);
+            if (count($query) > 0) {
+                $rows = $this->model::where('course_id', 1)->paginate($limit);
+            } else {
+                $rows = $this->model::paginate($limit);
+            }
 
-            $rows = $this->model::paginate($limit);
-
-            return view('reusable.pagination_table', [
+            return view($this->indexView, [
                 'rows' => $rows,
-                'title' => 'Список',
-                'fields' => GCHelper::getPaginatorFields($rows),
-                'tableButtons' => GCHelper::$TableButtons,
-                'postTableButtons' => GCHelper::$PostTableButtons,
+                'title' => trans('crud.title.' . $this->resource),
+                'fields' => CrudHelper::getPaginatorFields($rows),
+                'tableButtons' => CrudHelper::getTableButtons($this->resource, $this->modelsChildren),
+                'postTableButtons' => CrudHelper::getPostTableButtons($this->resource, $this->modelsChildren),
                 'resource' => $this->resource
             ]);
         }
@@ -40,14 +50,7 @@
          */
         public function create() {
             $row = new $this->model();
-            return view('reusable.element', [
-                'method' => 'POST',
-                'action' => 'store',
-                'resource' => $this->resource,
-                'readonly' => false,
-                'row' => $row,
-                'fields' => $row->getFillable()
-            ]);
+            return view($this->elementView, $this->getElementViewParams('store', $row));
         }
 
         /**
@@ -69,15 +72,7 @@
          */
         public function show($id) {
             $row = $this->model::findOrFail($id);
-            return view('reusable.element', [
-                'method' => 'GET',
-                'action' => 'show',
-                'readonly' => true,
-                'needParam' => true,
-                'row' => $row,
-                'fields' => GCHelper::getAvailableFields($row),
-                'resource' => $this->resource
-            ]);
+            return view($this->elementView, $this->getElementViewParams('show', $row));
         }
 
         /**
@@ -88,17 +83,7 @@
          */
         public function edit($id) {
             $row = $this->model::findOrFail($id);
-            return view('reusable.element', [
-                'method' => 'POST',
-                'submethod' => 'PATCH',
-                'action' => 'update',
-                'resource' => $this->resource,
-                'needParam' => true,
-                'readonly' => false,
-                'row' => $row,
-                'fields' => GCHelper::getAvailableFields($row)
-            ]);
-
+            return view($this->elementView, $this->getElementViewParams('update', $row));
         }
 
         /**
@@ -124,6 +109,40 @@
             $row = $this->model::findOrFail($id);
             $row->delete();
             return redirect()->route($this->resource . '.index');
+        }
+
+        /**
+         * Возвращает параметры для представления в зависимости от метода контроллера
+         */
+        protected function getElementViewParams($action, $row) {
+            $params = [
+                'method' => 'GET',
+                'action' => $action,
+                'readonly' => true,
+                'needParam' => true,
+                'row' => $row,
+                'fields' => CrudHelper::getAvailableFields($row),
+                'resource' => $this->resource
+            ];
+            switch ($action) {
+                case 'store':
+                    {
+                        $params['method'] = 'POST';
+                        $params['readonly'] = false;
+                        $params['fields'] = $row->getFillable();
+                        break;
+                    }
+                case 'update':
+                    {
+                        $params['method'] = 'POST';
+                        $params['submethod'] = 'PATCH';
+                        $params['readonly'] = false;
+                        $params['fields'] = $row->getFillable();
+                        break;
+                    }
+                default:
+            }
+            return $params;
         }
 
     }

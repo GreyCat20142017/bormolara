@@ -4,6 +4,7 @@
 
     use App\Http\Requests\PhraseRequest;
     use App\Models\Word as CrudModel;
+    use App;
 
     class WordController extends CrudController {
 
@@ -15,5 +16,6 @@
             $this->middleware('auth');
             $this->model = CrudModel::class;
             $this->resource = 'word';
+            $this->modelsChildren = App::make($this->model)::getChildModels();
         }
     }

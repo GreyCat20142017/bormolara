@@ -2,12 +2,11 @@
 
     namespace App\Models;
 
-    use Illuminate\Database\Eloquent\Model;
-
-    class Word extends Model {
+    class Word extends Crud {
         public $timestamps = false;
         protected $guarded = ['id'];
         protected $fillable = ['section_id', 'user_id', 'english', 'russian'];
+        protected static $childModels = [];
 
         public function course() {
             return $this->belongsTo(Course::class);

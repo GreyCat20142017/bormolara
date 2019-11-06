@@ -2,6 +2,7 @@
 
     namespace App\Http\Controllers;
 
+    use Illuminate\Support\Facades\App;
     use App\Http\Requests\PhraseRequest;
     use App\Models\Section as CrudModel;
 
@@ -15,5 +16,6 @@
             $this->middleware('auth');
             $this->model = CrudModel::class;
             $this->resource = 'section';
+            $this->modelsChildren = App::make($this->model)::getChildModels();
         }
     }

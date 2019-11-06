@@ -3,13 +3,13 @@
     namespace App\Models;
 
     use App\User;
-    use Illuminate\Database\Eloquent\Model;
 
-    class Section extends Model {
+    class Section extends Crud {
         public $timestamps = false;
         protected $fillable = ['name'];
         protected $guarded = ['id'];
         protected $hidden = ['hidden'];
+        protected static $childModels = ['Phrase'];
 
         public function phrases() {
             return $this->hasMany(Phrase::class);
