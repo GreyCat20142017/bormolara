@@ -2,43 +2,48 @@
 
     namespace App\Http\Controllers;
 
-    use App\Models\Crud;
-    use Illuminate\Support\Facades\App;
     use Illuminate\Http\Request;
     use App\Repositories\RepositoryFactory;
     use App\Services\CrudHelper;
+    use App\Models\Crud;
 
     abstract class CrudController extends Controller {
 
         protected $resource;
         protected $model;
+        protected $modelChildren;
+        protected $modelFields;
 
         protected $indexView = 'crud.pagination_table';
         protected $elementView = 'crud.element';
 
-        public function __construct($modelName) {
+        protected function fillClassProperties($modelName, $model) {
             $this->middleware('auth');
             $this->resource = $modelName;
-            $this->model = App::make($modelName);
-            $this->modelsChildren = [];
+            $this->model = $model;
+            $this->modelChildren = $model::getChildModels();
+            $this->modelFields = CrudHelper::getFieldsWithTypes($this->resource);
+        }
+
+        public function __construct($modelName) {
+            fillClassProperties($modelName, Crud::class);
         }
 
         public function index(Request $request) {
             $limit = intval(config()->offsetGet('constants.min_records_limit') ?? 10);
-            $query = $request->query();
-            dump($query);
-            if (count($query) > 0) {
-                $rows = $this->model::where('course_id', 1)->paginate($limit);
-            } else {
-                $rows = $this->model::paginate($limit);
-            }
+            $query = CrudHelper::withoutPages($request->query());
+
+            $rows = (count($query) > 0) ?
+                $this->model::where($query)->paginate($limit) :
+                $this->model::paginate($limit);
+
 
             return view($this->indexView, [
                 'rows' => $rows,
                 'title' => trans('crud.title.' . $this->resource),
                 'fields' => CrudHelper::getPaginatorFields($rows),
-                'tableButtons' => CrudHelper::getTableButtons($this->resource, $this->modelsChildren),
-                'postTableButtons' => CrudHelper::getPostTableButtons($this->resource, $this->modelsChildren),
+                'tableButtons' => CrudHelper::getTableButtons($this->resource, $this->modelChildren),
+                'postTableButtons' => CrudHelper::getPostTableButtons($this->resource, $this->modelChildren),
                 'resource' => $this->resource
             ]);
         }

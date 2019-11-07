@@ -6,6 +6,7 @@
         public $timestamps = false;
         protected $guarded = ['id'];
         protected $fillable = ['section_id', 'user_id', 'english', 'russian'];
+        protected $hidden = ['section_id', 'user_id'];
         protected static $childModels = [];
 
         public function section() {

@@ -3,6 +3,7 @@
     namespace App\Models;
 
     use App\User;
+    use App\Models\Phrase;
 
     class Section extends Crud {
         public $timestamps = false;

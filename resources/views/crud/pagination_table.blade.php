@@ -12,7 +12,7 @@
             <thead class="thead-light">
             <tr>
                 @foreach($fields as $field)
-                    <th class="text-center"> {{ trans('fields.' . $field) }}</th>
+                    <th class="text-center" style="vertical-align: middle;"> {{ trans('fields.' . $field) }}</th>
                 @endforeach
                 @include('crud.parts.table_buttons_headers')
             </tr>

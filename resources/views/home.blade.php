@@ -17,13 +17,12 @@
                         You are logged in!
 
                         <hr/>
+                        <h5>Работа с данными для Бормотунчика</h5>
                         <ul class="list-unstyled">
-                            <li><a href={{route('course.index')}}>Список курсов</a></li>
-                            <li><a href={{route('section.index')}}>Список разделов</a></li>
-                            <li><hr/></li>
-                            <li><a href={{route('word.index')}}>Список слов</a></li>
-                            <li><a href={{route('phrase.index')}}>Список фраз</a></li>
+                            <li><a href={{route('course.index')}}>Список курсов (лексика)</a></li>
+                            <li><a href={{route('section.index')}}>Список курсов (фразы)</a></li>
                         </ul>
+                        <hr/>
                     </div>
                 </div>
             </div>

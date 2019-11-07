@@ -5,7 +5,8 @@
     class Word extends Crud {
         public $timestamps = false;
         protected $guarded = ['id'];
-        protected $fillable = ['section_id', 'user_id', 'english', 'russian'];
+        protected $hidden = ['course_id', 'user_id'];
+        protected $fillable = ['course_id', 'user_id', 'english', 'russian'];
         protected static $childModels = [];
 
         public function course() {

@@ -2,9 +2,7 @@
 
     namespace App\Http\Controllers;
 
-    use Illuminate\Support\Facades\App;
-    use App\Http\Requests\PhraseRequest;
-    use App\Models\Section as CrudModel;
+    use App\Models\Section;
 
     class SectionController extends CrudController {
 
@@ -12,10 +10,6 @@
         protected $model;
 
         public function __construct() {
-
-            $this->middleware('auth');
-            $this->model = CrudModel::class;
-            $this->resource = 'section';
-            $this->modelsChildren = App::make($this->model)::getChildModels();
+            $this->fillClassProperties('section', Section::class);
         }
     }
