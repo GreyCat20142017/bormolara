@@ -9,11 +9,25 @@
         protected $hidden = ['section_id', 'user_id'];
         protected static $childModels = [];
 
+        protected $attributes = [
+            'section_id' => 1,
+            'user_id' => 1
+        ];
+
         public function section() {
             return $this->belongsTo(Section::class);
         }
 
-        public function scopeEnabled ($query, $user_id, $data_user_id = 1) {
-            $query->whereIn('user_id', [$user_id, $data_user_id]);
+        public function parent() {
+            return $this->belongsTo(Section::class);
         }
+
+        public function scopeEnabled($query) {
+            return $query->whereIn('user_id', [auth()->id(), config()->offsetGet('constants.data_user_id')]);
+        }
+
+        public function scopeOwn($query) {
+            return $query->whereIn('user_id', [auth()->id()]);
+        }
+
     }

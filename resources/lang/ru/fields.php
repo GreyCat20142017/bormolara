@@ -9,5 +9,5 @@
         'english' => 'английский',
         'password' => 'пароль',
         'own' => 'свой',
-        'email_verified_at' => 'подтверждение email'
+        'email_verified_at' => 'подтверждение email',
     ];

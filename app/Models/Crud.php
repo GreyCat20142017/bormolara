@@ -23,4 +23,15 @@
             return count(static::$childModels ?? 0);
         }
 
+        public function parent() {
+            return null;
+        }
+
+        public function scopeEnabled ($query) {
+            return $query;
+        }
+
+        public function scopeOwn ($query) {
+            return $query;
+        }
     }

@@ -55,7 +55,8 @@
             $buttons = [
                 [
                     'title' => 'создать',
-                    'route' => $resource . '.create'
+                    'route' => $resource . '.create',
+                    'withQuery' => true
                 ],
                 [
                     'title' => 'домой',
@@ -69,7 +70,7 @@
             return $buttons;
         }
 
-        public static function getTableButtons($resource, $models) {
+        public static function getTableButtons($resource, $models, $query) {
             $buttons = [];
             foreach (static::$TableButtons as $buttonKey => $button) {
                 $buttons[] = [

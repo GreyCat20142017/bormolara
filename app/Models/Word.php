@@ -9,12 +9,24 @@
         protected $fillable = ['course_id', 'user_id', 'english', 'russian'];
         protected static $childModels = [];
 
+        protected $attributes = [
+            'course_id' => 1,
+            'user_id' => 1
+        ];
+
         public function course() {
             return $this->belongsTo(Course::class);
         }
 
-        public function scopeEnabled($query, $user_id, $data_user_id = 1) {
-            $query->whereIn('user_id', [$user_id, $data_user_id]);
+        public function parent() {
+            return $this->belongsTo(Course::class);
+        }
 
+        public function scopeEnabled($query) {
+            return $query->whereIn('user_id', [auth()->id(), config()->offsetGet('constants.data_user_id')]);
+        }
+
+        public function scopeOwn($query) {
+            return $query->whereIn('user_id', [auth()->id()]);
         }
     }
