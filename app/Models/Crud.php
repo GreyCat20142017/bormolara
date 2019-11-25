@@ -23,8 +23,8 @@
             return count(static::$childModels ?? 0);
         }
 
-        public function parent() {
-            return null;
+        public function parentQuery() {
+            return [];
         }
 
         public function scopeEnabled ($query) {

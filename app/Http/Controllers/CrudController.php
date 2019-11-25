@@ -2,6 +2,7 @@
 
     namespace App\Http\Controllers;
 
+    use App\Components\FlashMessages;
     use Illuminate\Http\Request as CrudRequest;
     use App\Repositories\RepositoryFactory;
     use App\Services\CrudHelper;
@@ -9,6 +10,8 @@
     use Illuminate\Support\Facades\Validator;
 
     abstract class CrudController extends Controller {
+
+        use FlashMessages;
 
         protected $resource;
         protected $model;
@@ -19,7 +22,7 @@
         protected $elementView = 'crud.element';
 
          public function __construct($modelName) {
-            fillClassProperties($modelName, Crud::class, Request::class);
+            fillClassProperties($modelName, Crud::class, FormRequest::class);
         }
 
         public function index(CrudRequest $request) {
@@ -59,7 +62,8 @@
         public function store(CrudRequest $request) {
             $this->crudValidate($request);
             $this->model::create($request->all());
-            return redirect()->route($this->resource . '.index');
+            $params = app()->make($this->model)->parentQuery();
+            return redirect()->route($this->resource . '.index', $params);
         }
 
         /**
@@ -104,9 +108,10 @@
          * @param Course $row
          * @return \Illuminate\Http\Response
          */
-        public function destroy($id) {
+        public function destroy(CrudRequest $request, $id) {
             $row = $this->model::findOrFail($id);
             $row->delete();
+            static::message('info', 'Запись с id=' .$id . ' была удалена!');
             return redirect()->route($this->resource . '.index');
         }
 

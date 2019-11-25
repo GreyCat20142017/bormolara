@@ -37,4 +37,5 @@
     @else
         <h4>Нет данных для формирования страницы с такими условиями</h4>
     @endif
+    @include ('common.flashMessages')
 @endsection

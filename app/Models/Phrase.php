@@ -18,8 +18,8 @@
             return $this->belongsTo(Section::class);
         }
 
-        public function parent() {
-            return $this->belongsTo(Section::class);
+        public function parentQuery() {
+            return $this->belongsTo(Section::class)->getParent()->attributes;
         }
 
         public function scopeEnabled($query) {

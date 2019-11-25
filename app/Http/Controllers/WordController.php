@@ -25,7 +25,7 @@
             $row->fill($request->query());
             $row->user_id = auth()->user()->id;
             $row->course_id = $courseId;
-            return view($this->elementView, $this->getElementViewParams('store', $row));
+            return view($this->elementView, $this->getElementViewParams('store', $row, ['course_id', $courseId]));
         }
 
     }

@@ -20,6 +20,7 @@
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::resource('course', 'CourseController');
+    Route::resource('word', 'WordController');
     Route::resource('section', 'SectionController');
     Route::resource('phrase', 'PhraseController');
-    Route::resource('word', 'WordController');
+
