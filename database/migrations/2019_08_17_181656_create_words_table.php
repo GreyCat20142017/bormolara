@@ -12,11 +12,9 @@ class CreateWordsTable extends Migration
         Schema::create('words', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('course_id')->default(1);
-            $table->unsignedBigInteger('user_id')->default(1);
-            $table->string('english', 30)->default('');
-            $table->string('russian', 150)->default('');
+            $table->string('english', 32)->default('');
+            $table->string('russian', 160)->default('');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('CASCADE');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
         });
     }
 

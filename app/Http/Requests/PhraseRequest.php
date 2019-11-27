@@ -27,8 +27,7 @@ class PhraseRequest extends FormRequest
     public function rules() {
         return [
             'english' => ['required', 'string', 'max:255'],
-            'russian' => ['required', 'string', 'max:255'],
-            'user_id' => ['required', Rule::in([auth()->id()])]
+            'russian' => ['required', 'string', 'max:255']
         ];
     }
     public function attributes()
@@ -36,7 +35,6 @@ class PhraseRequest extends FormRequest
         return [
             'english' => 'Английский',
             'russian' => 'Русский',
-            'user_id' => 'Id пользователя'
         ];
     }
 
@@ -46,7 +44,6 @@ class PhraseRequest extends FormRequest
             'required' => 'Поле ":attribute" необходимо заполнить',
             'min'  => 'Поле ":attribute" должно быть длиной не менее :min',
             'max'  => 'Поле ":attribute" должно быть длиной не более :max',
-            'in' => 'Можно изменять только собственные фразы'
         ];
     }
 }

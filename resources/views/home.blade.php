@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Dashboard</div>
+                    <div class="card-header">Списки</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -14,7 +14,7 @@
                             </div>
                         @endif
 
-                        You are logged in!
+                        Выполнен вход под пользователем <strong>{{auth()->user()->name}}</strong>
 
                         <hr/>
                         <h5>Работа с данными для Бормотунчика</h5>

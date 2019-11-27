@@ -38,11 +38,11 @@
                         <!-- Authentication Links -->
                         @guest
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Вход') }}</a>
                             </li>
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Регистрация') }}</a>
                                 </li>
                             @endif
                         @else
@@ -51,16 +51,21 @@
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-right text-left" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        {{ __('Выход') }}
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                         @csrf
                                     </form>
+                                    <hr class="my-0 py-0"/>
+                                    <a class="dropdown-item" href="{{ route('home') }}">Списки</a>
+                                    <hr class="my-0 py-0"/>
+                                    <a class="dropdown-item" href="{{ route('course.index') }}">Список курсов (cлова)</a>
+                                    <a class="dropdown-item" href="{{ route('section.index') }}">Список курсов (фразы)</a>
                                 </div>
                             </li>
                         @endguest
@@ -71,6 +76,8 @@
 
         <main class="py-4 container">
             @yield('content')
+            <hr/>
+            @include('common.flashMessages')
         </main>
     </div>
 </body>

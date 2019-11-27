@@ -12,18 +12,22 @@ class CoursesTableSeeder extends Seeder
                 [
                     'id' => 1,
                     'name' => 'own',
+                    'user_id' => 1
                 ],
                 [
                     'id' => 2,
                     'name' => 'basic',
+                    'user_id' => 1
                 ],
                 [
                     'id' => 3,
                     'name' => 'book',
+                    'user_id' => 1
                 ],
                 [
                     'id' => 4,
                     'name' => 'abc',
+                    'user_id' => 1
                 ]
             ]);
 

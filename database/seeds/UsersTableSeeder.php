@@ -9,24 +9,22 @@
                 DB::table('users')->insert([
                     [
                         'id' => 1,
-                        'name' => 'admin',
-                        'email' => 'zz@zz.zz',
-                        'password' => bcrypt('zzzzz'),
+                        'name' => 'datauser',
+                        'email' => 'dd@qq.qq',
+                        'password' => '$2y$10$9zF4rRq9LthD9rGggwDgSuy9qJrQhMQNJTgzEUuKnRn2s7PapAmyG',
                         'email_verified_at' => now(),
-                        'remember_token' => 'zzzzz55555',
-                        'admin' => 1,
+                        'admin' => 0,
                         'created_at' => Carbon::now()
                     ],
                     [
                         'id' => 2,
-                        'name' => 'datauser',
-                        'email' => 'tt@tt.tt',
-                        'password' => bcrypt('ttttt'),
+                        'name' => 'admin',
+                        'email' => 'admin@qq.qq',
+                        'password' => '$2y$10$9zF4rRq9LthD9rGggwDgSuy9qJrQhMQNJTgzEUuKnRn2s7PapAmyG',
                         'email_verified_at' => now(),
-                        'remember_token' => 'ttttt55555',
-                        'admin' => 0,
+                        'admin' => 1,
                         'created_at' => Carbon::now()
-                    ]
+                    ],
 
                 ]);
 

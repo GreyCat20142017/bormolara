@@ -28,7 +28,6 @@ class SectionRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:24'],
             'hidden' => ['integer', 'min:0', 'max:1'],
-            'own' => ['integer', 'min:0', 'max:1'],
 
         ];
     }

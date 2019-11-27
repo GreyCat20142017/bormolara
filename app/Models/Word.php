@@ -1,32 +1,16 @@
 <?php
 
     namespace App\Models;
+    use Illuminate\Database\Eloquent\Model;
 
-    class Word extends Crud {
+    class Word extends Model {
         public $timestamps = false;
         protected $guarded = ['id'];
-        protected $hidden = ['course_id', 'user_id'];
-        protected $fillable = ['course_id', 'user_id', 'english', 'russian'];
-        protected static $childModels = [];
-
-        protected $attributes = [
-            'course_id' => 1,
-            'user_id' => 1
-        ];
+        protected $fillable = ['course_id', 'english', 'russian'];
 
         public function course() {
             return $this->belongsTo(Course::class);
         }
 
-        public function parentQuery() {
-            return $this->belongsTo(Course::class)->getParent()->attributes;
-        }
 
-        public function scopeEnabled($query) {
-            return $query->whereIn('user_id', [auth()->id(), config()->offsetGet('constants.data_user_id')]);
-        }
-
-        public function scopeOwn($query) {
-            return $query->whereIn('user_id', [auth()->id()]);
-        }
     }

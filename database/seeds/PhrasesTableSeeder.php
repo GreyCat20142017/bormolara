@@ -9,7 +9,7 @@
                 $file = base_path('bormo_phrases.csv');
                 $query = 'LOAD DATA LOCAL INFILE "' . $file . '"
                         INTO TABLE phrases FIELDS TERMINATED BY  ","  LINES TERMINATED BY  "\n"  IGNORE 1 LINES 
-                            (id, section_id, user_id, english, russian)';
+                            (id, section_id, english, russian)';
                 DB::connection()->getpdo()->exec($query);
 
             } else {

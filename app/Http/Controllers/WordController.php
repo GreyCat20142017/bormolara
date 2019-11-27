@@ -2,30 +2,88 @@
 
     namespace App\Http\Controllers;
 
-    use App\Http\Requests\WordRequest;
+    use App\Components\FlashMessages;
+    use App\Models\Course;
     use App\Models\Word;
-    use Illuminate\Http\Request as CrudRequest;
+    use App\Http\Requests\WordRequest;
+    use Illuminate\Support\Str;
 
-    class WordController extends CrudController {
+    class WordController extends Controller {
+
+        use FlashMessages;
+
+        protected $parentName = 'course';
+        protected $modelName = 'word';
 
         public function __construct() {
-            $this->fillClassProperties('word', Word::class, WordRequest::class);
+            $this->middleware('auth');
         }
 
-        /**
-         * @param CrudRequest $request
-         * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
-         * Переопределение родительского метода Create. Все пользователи, кроме datauser могут создавать
-         * новые элементы только в разделе own
-         */
-        public function create(CrudRequest $request) {
-            $courseId = (auth()->id() === config()->offsetGet('constants.data_user_id')) ?
-                $request->input('course_id') : config()->offsetGet('constants.own_course_id');
-            $row = new $this->model();
-            $row->fill($request->query());
-            $row->user_id = auth()->user()->id;
-            $row->course_id = $courseId;
-            return view($this->elementView, $this->getElementViewParams('store', $row, ['course_id', $courseId]));
+        public function indexByParent(Course $course) {
+            $pageLimit = config()->offsetGet('constants.page_limit') ?? 10;
+            $rows = $course->words()->paginate($pageLimit);
+            return view('child.list', [
+                'rows' => $rows,
+                'title' => 'Список слов курса ' . (isset($course) ? Str::upper($course->name) : ''),
+                'modelName' => $this->modelName,
+                'parentName' => $this->parentName,
+                'parent' => $course
+            ]);
         }
 
+        public function createByParent(Course $course) {
+            if (!$this->canAdd($course)) {
+                static::message('warning', 'Нельзя добавлять контент в чужие курсы!');
+                return back();
+            }
+            return view('child.create', [
+                'title' => 'Новый элемент (слово)',
+                'modelName' => $this->modelName,
+                'parentName' => $this->parentName,
+                'parent' => $course
+            ]);
+        }
+
+        public function storeByParent(WordRequest $request, Course $course) {
+            $backRoute = $request->has('saveAndRepeat') ? '.createByParent' : '.indexByParent';
+            $word = $course->words()->create($request->all());
+            static::message('success', 'Добавлено слово c id=' . $word->id . ' (' . $word->english . ')!');
+            return redirect()->route($this->modelName . $backRoute, [$this->parentName => $course]);
+        }
+
+        public function show(Word $word) {
+            return view('child.show', [
+                'title' => 'Просмотр элемента (слово)',
+                'modelName' => $this->modelName,
+                'row' => $word
+            ]);
+        }
+
+        public function edit(Word $word) {
+            $this->authorize('change', $word);
+            return view('child.edit', [
+                'title' => 'Изменение элемента (слово)',
+                'modelName' => $this->modelName,
+                'row' => $word
+            ]);
+        }
+
+        public function update(WordRequest $request, Word $word) {
+            $word->update($request->all());
+            static::message('success', 'Слово c id=' . $word->id . ' (' . $word->english . ')  было изменено!');
+            $course = $word->course()->get()->first();
+            return redirect()->route($this->modelName . '.indexByParent', [$this->parentName => $course]);
+        }
+
+        public function destroy(Word $word) {
+            $this->authorize('change', $word);
+            static::message('info', 'Слово c id=' . $word->id . ' (' . $word->english . ')  было удалено!');
+            $word->delete();
+            return back();
+        }
+
+        protected function canAdd(Course $course) {
+            $id = auth()->id();
+            return ($id === $course->user_id);
+        }
     }

@@ -26,9 +26,8 @@ class WordRequest extends FormRequest
 
     public function rules() {
         return [
-            'english' => ['required', 'string', 'max:30'],
-            'russian' => ['required', 'string', 'max:150'],
-            'user_id' => ['required', Rule::in([auth()->id()])]
+            'english' => ['required', 'string', 'max:32'],
+            'russian' => ['required', 'string', 'max:160'],
         ];
     }
     public function attributes()
@@ -36,7 +35,6 @@ class WordRequest extends FormRequest
         return [
             'english' => 'Английский',
             'russian' => 'Русский',
-            'user_id' => 'Id пользователя'
         ];
     }
 
@@ -46,7 +44,6 @@ class WordRequest extends FormRequest
             'required' => 'Поле ":attribute" необходимо заполнить',
             'min'  => 'Поле ":attribute" должно быть длиной не менее :min',
             'max'  => 'Поле ":attribute" должно быть длиной не более :max',
-            'in' => 'Можно изменять только собственные слова'
         ];
     }
 }

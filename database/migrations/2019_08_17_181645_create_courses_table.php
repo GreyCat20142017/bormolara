@@ -10,8 +10,10 @@ class CreateCoursesTable extends Migration
     {
         Schema::create('courses', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name', 10)->default('own');
+            $table->bigInteger('user_id')->unsigned()->default(1);
+            $table->string('name', 32)->default('own');
             $table->boolean('hidden')->default(0);
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('CASCADE');
         });
     }
 
