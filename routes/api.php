@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 |
 */
 
+//Route::get('/api/search/{word}/{exact?}', 'Api/SearchController@search')->name('search');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

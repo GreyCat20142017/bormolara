@@ -3,7 +3,7 @@
     <h3>{{$title ?? 'Список'}}</h3>
     <table class="table-bordered w-100 text-center">
         <thead>
-        <tr class="bg-info text-dark">
+        <tr class="text-primary bg-lightblue">
             <th>id</th>
             <th>название</th>
             <th></th>

@@ -32,7 +32,7 @@
         }
 
         public function createByParent(Section $section) {
-            if ($this->canAdd($section)) {
+            if (!$this->canAdd($section)) {
                 static::message('warning', 'Нельзя добавлять контент в чужие курсы!');
                 return back();
             }
@@ -81,9 +81,9 @@
             return back();
         }
 
-        protected function canAdd(Phrase $phrase) {
+        protected function canAdd(Section $section) {
             $id = auth()->id();
-            return ($id === $phrase->user_id);
+            return ($id === $section->user_id);
         }
 
     }
