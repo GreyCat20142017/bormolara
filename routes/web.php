@@ -15,15 +15,17 @@
         return view('welcome');
     })->name('main');
 
+    //    Route::get('/test', 'TestController@test')->name('test');
+
     Auth::routes();
 
     Route::get('/home', 'HomeController@index')->name('home');
 
     Route::resource('course', 'CourseController');
     Route::resource('word', 'WordController')->except(['index', 'create', 'store']);
-    Route::get('/course/{course}/words/', 'WordController@indexByParent')->name('word.indexByParent');
+    Route::get('/course/{course}/words', 'WordController@indexByParent')->name('word.indexByParent');
     Route::get('/course/{course}/word/create', 'WordController@createByParent')->name('word.createByParent');
-    Route::post('/course/{course}word/', 'WordController@storeByParent')->name('word.storeByParent');
+    Route::post('/course/{course}/word', 'WordController@storeByParent')->name('word.storeByParent');
 
     Route::resource('section', 'SectionController');
     Route::resource('phrase', 'PhraseController')->except(['index', 'create', 'store']);

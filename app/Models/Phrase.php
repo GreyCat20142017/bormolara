@@ -12,4 +12,12 @@
         public function section() {
             return $this->belongsTo(Section::class);
         }
+
+        public static function search($text) {
+            return Phrase::where('english', 'like', '%' . $text . '%') ->orWhere('russian', 'like', '%' . $text . '%');
+        }
+
+        public static function searchExact($text) {
+            return Phrase::where('english', '=', $text)->orWhere('russian', '=', $text);
+        }
     }
