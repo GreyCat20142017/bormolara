@@ -4,6 +4,7 @@
 
     use App\User;
     use Illuminate\Database\Eloquent\Model;
+    use Illuminate\Support\Facades\Auth;
 
     class Course extends Model {
 
@@ -14,7 +15,7 @@
         public static function boot() {
             parent::boot();
             self::creating(function ($model) {
-                $model->user_id = auth()->id();
+                $model->user_id = Auth::id();
             });
         }
 
@@ -27,15 +28,15 @@
         }
 
         public function scopeEnabled($query) {
-            return $query->whereIn('user_id', [auth()->id(), config()->offsetGet('constants.data_user_id')]);
+            return $query->whereIn('user_id', [Auth::id(), config()->offsetGet('constants.data_user_id')]);
         }
 
         public function scopeOwn($query) {
-            return $query->whereIn('user_id', [auth()->id()]);
+            return $query->whereIn('user_id', [Auth::id()]);
         }
 
         public static function enabledOnly() {
-            return Course::whereIn('user_id', [auth()->id(), config()->offsetGet('constants.data_user_id')]);
+            return Course::whereIn('user_id', [Auth::id(), config()->offsetGet('constants.data_user_id')]);
         }
 
         public function wordsByLesson($lesson) {
@@ -54,7 +55,7 @@
         }
 
         public static function enabledCoursesInfo() {
-            $courses = Course::enabledOnly()->select('id', 'name')->withCount('words')->get();
+            $courses = Course::enabledOnly()->select('id', 'name', 'user_id')->withCount('words')->get();
             $limit = config()->offsetGet('constants.words_limit') ?? 20;
             foreach ($courses as $course) {
                 $course['lastlesson'] = intval(ceil($course['words_count'] / $limit));

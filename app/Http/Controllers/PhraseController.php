@@ -52,7 +52,7 @@
 
         public function show(Phrase $phrase) {
             return view('child.show', [
-                'title' => 'Просмотр элемента (слово)',
+                'title' => 'Просмотр элемента (фраза)',
                 'modelName' => $this->modelName,
                 'row' => $phrase
             ]);
@@ -69,14 +69,14 @@
 
         public function update(PhraseRequest $request, Phrase $phrase) {
             $phrase->update($request->all());
-            static::message('success', 'Слово c id=' . $phrase->id . ' (' . $phrase->english . ')  было изменено!');
+            static::message('success', 'Фраза c id=' . $phrase->id . ' (' . $phrase->english . ')  была изменена!');
             $section = $phrase->course()->get()->first();
             return redirect()->route($this->modelName . '.indexByParent', [$this->parentName => $section]);
         }
 
         public function destroy(Phrase $phrase) {
             $this->authorize('change', $phrase);
-            static::message('info', 'Слово c id=' . $phrase->id . ' (' . $phrase->english . ')  было удалено!');
+            static::message('info', 'Фраза c id=' . $phrase->id . ' (' . $phrase->english . ')  была удалена!');
             $phrase->delete();
             return back();
         }

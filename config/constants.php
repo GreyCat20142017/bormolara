@@ -7,5 +7,6 @@
         'words_limit' => 20,
         'words_for_offline' => (20 * 5),
         'phrases_limit' => 7,
-        'phrases_for_offline' => (7 * 5)
+        'phrases_for_offline' => (7 * 5),
+        'origin' => '*'
     ];

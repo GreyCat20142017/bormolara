@@ -3,7 +3,7 @@
     namespace App\Models;
 
     use App\User;
-    use App\Models\Phrase;
+    use Illuminate\Support\Facades\Auth;
     use Illuminate\Database\Eloquent\Model;
 
     class Section extends Model {
@@ -16,7 +16,7 @@
         {
             parent::boot();
             self::creating(function ($model) {
-                $model->user_id = auth()->id();
+                $model->user_id = Auth::id();
             });
         }
 
@@ -29,15 +29,15 @@
         }
 
         public function scopeEnabled($query) {
-            return $query->whereIn('user_id', [auth()->id(), config()->offsetGet('constants.data_user_id')]);
+            return $query->whereIn('user_id', [Auth::id(), config()->offsetGet('constants.data_user_id')]);
         }
 
         public function scopeOwn($query) {
-            return $query->whereIn('user_id', [auth()->id()]);
+            return $query->whereIn('user_id', [Auth::id()]);
         }
 
         public static function enabledOnly() {
-            return Section::whereIn('user_id', [auth()->id(), config()->offsetGet('constants.data_user_id')]);
+            return Section::whereIn('user_id', [Auth::id(), config()->offsetGet('constants.data_user_id')]);
         }
 
         public function phrasesByLesson($lesson) {
@@ -56,7 +56,7 @@
         }
 
         public static function enabledSectionsInfo() {
-            $sections = Section::enabledOnly()->select('id', 'name')->whereHas('phrases')->withCount('phrases')->get();
+            $sections = Section::enabledOnly()->select('id', 'name', 'user_id')->whereHas('phrases')->withCount('phrases')->get();
             $limit = config()->offsetGet('constants.phrases_limit') ?? 7;
             foreach ($sections as $course) {
                 $course['lastlesson'] = intval(ceil($course['phrases_count'] / $limit));

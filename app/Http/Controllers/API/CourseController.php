@@ -18,7 +18,7 @@
                 $lesson = intval($request->get('lesson'));
                 return $course->wordsByLesson($lesson)->toArray();
             } else {
-                return Course::enabledCoursesInfo()->toArray();
+                return response(Course::enabledCoursesInfo()->toArray())->header("Access-Control-Allow-Origin",  "*");
             }
         }
     }

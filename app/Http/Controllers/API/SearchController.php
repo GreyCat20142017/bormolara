@@ -10,7 +10,7 @@
     class SearchController extends Controller {
 
         public function searchWords(Request $request) {
-            if ($request->has('word', 'exact')) {
+            if ($request->has(['word', 'exact'])) {
                 $word = trim($request->get('word'));
                 return Word::searchExact($word)->get()->toArray();
             } elseif ($request->has('word')) {
@@ -21,7 +21,7 @@
         }
 
         public function searchPhrases(Request $request) {
-            if ($request->has('phrase', 'exact')) {
+            if ($request->has(['phrase', 'exact'])) {
                 $phrase = trim($request->get('phrase'));
                 return Phrase::searchExact($phrase)->get()->toArray();
             } elseif ($request->has('phrase')) {

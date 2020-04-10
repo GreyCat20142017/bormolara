@@ -19,7 +19,7 @@
 
         public function index() {
             $pageLimit = config()->offsetGet('constants.page_limit') ?? 10;
-            $sections = Section::paginate($pageLimit);
+            $sections = Section::own()->paginate($pageLimit);
             return view('parent.list', [
                 'rows' => $sections,
                 'title' => 'Список курсов (фразы)',
