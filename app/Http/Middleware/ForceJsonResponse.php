@@ -16,9 +16,9 @@ class ForceJsonResponse
      */
     public function handle(Request $request, Closure $next)
     {
-        //All routes returns a JSON
-        $request->headers->set('Accept','application/json');
+        $data = $next($request)->original;
 
-        return $next($request);
+        return response()->json($data, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'],
+            JSON_UNESCAPED_UNICODE);
     }
 }

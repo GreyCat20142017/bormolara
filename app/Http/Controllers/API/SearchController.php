@@ -31,4 +31,11 @@
             return [];
         }
 
+        public function testAPI() {
+            $data = [
+                'фраз' => Phrase::all()->count(),
+                'слов' => Word::all()->count()
+            ];
+            return $data;
+        }
     }
